@@ -9,12 +9,39 @@
 </head>
 <body>
   <div class="timer-container">
-    <h1>До обеда осталось...</h1>
+    <h1>До 12 апреля осталось:</h1>
     <div class="timer" id="timer">
       00 дней 00 часов 00 минут 00 секунд
     </div>
+    <button id="modifyTimerBtn">Изменить таймер</button>
   </div>
-  <!-- Здесь будет содержимое страницы -->
+
+  <!-- Модальное окно ввода секретного кода -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Введите секретный код</h2>
+      <input type="password" id="secretCode" placeholder="Секретный код">
+      <button id="submitCodeBtn">Подтвердить</button>
+      <div id="codeError" style="color: red; display: none;">Неверный код!</div>
+    </div>
+  </div>
+
+  <!-- Модальное окно изменения таймера -->
+  <div id="modifyModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Изменить таймер</h2>
+      <label for="timeChange">Изменить на (в часах):</label>
+      <input type="number" id="timeChange" step="1" placeholder="Введите количество часов">
+      <br>
+      <label for="reason">Причина изменения:</label>
+      <input type="text" id="reason" placeholder="Укажите причину">
+      <br>
+      <button id="applyChangeBtn">Применить</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
