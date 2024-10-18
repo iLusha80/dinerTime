@@ -1,122 +1,45 @@
-// Устанавливаем целевую дату (16 апреля 13:00 текущего года)
-let targetDate = new Date();
-targetDate.setMonth(3); // Месяцы в JS от 0 (январь) до 11 (декабрь)
-targetDate.setDate(16);
-targetDate.setHours(13, 0, 0, 0);
+console.log('Scripte sucsesvuli blat import')
+const targetDate = new Date('April 12, 2025 13:00:00').getTime()
 
-// Функция для обновления таймера
-function updateTimer() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    if (distance < 0) {
-        document.querySelector('.timer').innerHTML = "Время истекло";
-        clearInterval(timerInterval);
-        return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById("days").innerText = days;
-    document.getElementById("hours").innerText = hours;
-    document.getElementById("minutes").innerText = minutes;
-    document.getElementById("seconds").innerText = seconds;
-}
-
-// Обновляем таймер каждую секунду
+console.log(targetDate)
 updateTimer();
 const timerInterval = setInterval(updateTimer, 1000);
+// const mytimerInterval = setInterval(egorLox, 1000);
 
-// Модальные окна
-const modal = document.getElementById("modal");
-const adjustModal = document.getElementById("adjustModal");
-const btnIncrease = document.getElementById("increaseBtn");
-const btnDecrease = document.getElementById("decreaseBtn");
-const spanClose = document.getElementsByClassName("close");
+// TODO узнать про переменные и функции в js 
+// так же узнать про setInterval смысл применение
 
-// Открытие модального окна при нажатии кнопок
-btnIncrease.addEventListener("click", () => openModal());
-btnDecrease.addEventListener("click", () => openModal());
 
-// Закрытие модального окна
-for (let span of spanClose) {
-    span.onclick = function() {
-        modal.style.display = "none";
-        adjustModal.style.display = "none";
-        document.getElementById("codeError").innerText = "";
-        document.getElementById("adjustError").innerText = "";
-    }
+
+function updateTimer() {
+  const now = new Date().getTime(); // Текущее время
+  const timeRemaining = targetDate - now; // Разница во времени
+
+  // Вычисляем дни, часы, минуты и секунды
+  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+  // Форматируем время для отображения с ведущими нулями
+  const daysText = days.toString().padStart(2, '0');
+  const hoursText = hours.toString().padStart(2, '0');
+  const minutesText = minutes.toString().padStart(2, '0');
+  const secondsText = seconds.toString().padStart(2, '0');
+
+  // Обновляем содержимое элемента с таймером
+  const timerElement = document.getElementById('timer');
+  timerElement.textContent = `${daysText} дней ${hoursText} часов ${minutesText} минут ${secondsText} секунд`;
+
+  // Если время истекло, отображаем сообщение
+  if (timeRemaining < 0) {
+    clearInterval(timerInterval);
+    timerElement.textContent = 'Время истекло!';
+  }
 }
 
-// Закрытие при клике вне модального окна
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-        document.getElementById("codeError").innerText = "";
-    }
-    if (event.target == adjustModal) {
-        adjustModal.style.display = "none";
-        document.getElementById("adjustError").innerText = "";
-    }
+
+function egorLox(){
+	const msg = 'egorLox'
+	console.log(msg)
 }
-
-// Открытие модального окна
-function openModal() {
-    modal.style.display = "block";
-}
-
-// Валидация кода доступа
-const submitCodeBtn = document.getElementById("submitCode");
-submitCodeBtn.addEventListener("click", () => {
-    const accessCode = document.getElementById("accessCode").value;
-    const correctCode = "1234"; // Установите ваш код доступа здесь
-
-    if (accessCode === correctCode) {
-        modal.style.display = "none";
-        adjustModal.style.display = "block";
-    } else {
-        document.getElementById("codeError").innerText = "Неверный код доступа.";
-    }
-});
-
-// Функция для сохранения изменений в localStorage
-function saveTargetDate() {
-    localStorage.setItem('targetDate', targetDate.getTime());
-}
-
-// Функция для загрузки даты из localStorage
-function loadTargetDate() {
-    const storedDate = localStorage.getItem('targetDate');
-    if (storedDate) {
-        targetDate = new Date(parseInt(storedDate));
-    }
-}
-
-// Загрузка даты при старте
-loadTargetDate();
-
-// Обработчик сохранения изменений
-const submitAdjustBtn = document.getElementById("submitAdjust");
-submitAdjustBtn.addEventListener("click", () => {
-    const daysInput = parseInt(document.getElementById("daysInput").value);
-    const reason = document.getElementById("reason").value.trim();
-
-    if (isNaN(daysInput)) {
-        document.getElementById("adjustError").innerText = "Пожалуйста, введите число дней.";
-        return;
-    }
-
-    // Изменение целевой даты
-    targetDate.setDate(targetDate.getDate() + daysInput);
-
-    // Здесь вы можете обработать причину (например, сохранить или отобразить)
-
-    saveTargetDate();
-    adjustModal.style.display = "none";
-    document.getElementById("daysInput").value = "";
-    document.getElementById("reason").value = "";
-    document.getElementById("adjustError").innerText = "";
-});
